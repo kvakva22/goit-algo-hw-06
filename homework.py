@@ -14,7 +14,7 @@ class Name(Field):
 class Phone(Field):
     def __init__(self, value):
         super().__init__(value)
-        if len(value) != 10:
+        if len(value) != 10 or not value.isdigit():
              raise ValueError("Номер повинен містити 10 цифр")
 
 class Record:
@@ -26,10 +26,11 @@ class Record:
         self.phones.append(Phone(number))
 
     def remove_phone(self, remnum):
-        if remnum in self.phones:
-            del remnum
-        else:
-            print(f"Запис з номером '{remnum}' не знайдено.")
+        for phone in self.phones:
+            if phone.value == remnum:
+                 self.phones.remove(phone)
+                 return print(f"Запис з номером '{remnum}' видалено.")
+        return print(f"Запис з номером '{remnum}' не знайдено.")
 
     def edit_phone(self, oldnum, newnum):
         for phone in self.phones:
@@ -42,12 +43,12 @@ class Record:
     def find_phone(self, phone):
         for el in self.phones:
              if el.value == phone:
-                  return el.value
+                  return el
         return None
 
     def __str__(self):
         phone_numbers = '; '.join(p.value for p in self.phones)
-        return f"{phone_numbers}"
+        return f"{self.name}: {phone_numbers}"
 
 class AddressBook(UserDict):
     def add_record(self, record):
@@ -64,7 +65,7 @@ class AddressBook(UserDict):
             print(f"Запис з ім'ям '{rem}' не знайдено.")
     
     def __str__(self):
-        records = '\n'.join(f"{name}: {record}" for name, record in self.data.items())
+        records = '\n'.join(f"{record}" for name, record in self.data.items())
         return f"Address Book:\n{records}"
 
 
