@@ -33,11 +33,14 @@ class Record:
         return print(f"Запис з номером '{remnum}' не знайдено.")
 
     def edit_phone(self, oldnum, newnum):
-        for phone in self.phones:
-             if phone.value == oldnum:
-                phone.value = newnum
-                return
-             raise ValueError(f"Номер '{oldnum}' не знайдено.")
+        if len(newnum) != 10 or not newnum.isdigit():
+            raise ValueError("Номер повинен містити 10 цифр")
+        else:
+            for phone in self.phones:
+                if phone.value == oldnum:
+                    phone.value = newnum
+                    return
+                raise ValueError(f"Номер '{oldnum}' не знайдено.")
              
 
     def find_phone(self, phone):
